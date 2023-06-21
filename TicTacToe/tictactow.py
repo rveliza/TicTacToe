@@ -36,10 +36,6 @@ class Player:
         self.points = 0
 
 
-############## Game
-## Methods:
-    # clear_screen
-
 class Game:
     def __init__(self, player_1: object, player_2: object):
         self.board = [
@@ -117,21 +113,17 @@ class Game:
     def clear_screen(self):
         os.system('clear')
             
+######### INITIAL SETUP ################
+os.system('clear')
+print(greeting_message)
 
-player_1 = Player("Reyner", "X")
-player_2 = Player("Juan", "O")
 
-ttt = Game(player_1, player_2)
-print(ttt)
-print(dir(ttt))
-print("Full Board: ", ttt.check_if_full_board())
-print("Winner: ", ttt.check_if_winner("X"))
-ttt.clear_screen()
 
-# Print Greeting
+x_player_name = input("Name for player playing 'X': ")
+player_1 = Player(x_player_name, "X")
 
-# Define player 1 and tile
-# Define player 2 and tile
+y_player_name = input("Name for player playing 'O': ")
+player_2 = Player(y_player_name, "O")
 
 # Randomly Choose First Player
 
