@@ -38,20 +38,16 @@ class Player:
 
 ############## Game
 ## Methods:
-    # mark board
-    # check_if_winner
-    # check_if_tie
-    # reset_board
     # clear_screen
 
 class Game:
     def __init__(self, player_1: object, player_2: object):
         self.board = [
-    ["X", "|", "X", "|", "X"],
+    [" ", "|", " ", "|", " "],
     ["-", "-", "-", "-", "-"],
-    ["X", "|", "X", "|", "X"],
+    [" ", "|", " ", "|", " "],
     ["-", "-", "-", "-", "-"],
-    ["X", "|", "X", "|", "X"]
+    [" ", "|", " ", "|", " "]
 ]
         self.player_1 = player_1
         self.player_2 = player_2
@@ -67,12 +63,16 @@ class Game:
                 print(item, end=" ")
             print("\n")
 
+    def add_tile(self, tile: str, row: int, col: int):
+        self.board[row][col] = tile
+        self.available_positions.remove(tile)
+
     def check_if_full_board(self):
         if len(self.available_positions) == 0:
             return True
         return False
     
-    def check_if_winner(self, tile):
+    def check_if_winner(self, tile: str):
         # Top Row
         if self.board[0][0] == tile and self.board[0][2] == tile and self.board[0][4] == tile:
             return True
@@ -98,15 +98,35 @@ class Game:
         if self.board[4][0] == tile and self.board[2][2] == tile and self.board[0][4] == tile:
             return True
         return False
-        
+    
+    def check_if_tie(self):
+        full_board = self.check_if_full_board()
+        winner = self.check_if_winner
+        if full_board and not winner:
+            return True
+        return False
+    
+    def reset_board(self):
+        self.board = [
+    [" ", "|", " ", "|", " "],
+    ["-", "-", "-", "-", "-"],
+    [" ", "|", " ", "|", " "],
+    ["-", "-", "-", "-", "-"],
+    [" ", "|", " ", "|", " "]
+]
+    def clear_screen(self):
+        os.system('clear')
             
 
 player_1 = Player("Reyner", "X")
 player_2 = Player("Juan", "O")
 
 ttt = Game(player_1, player_2)
+print(ttt)
+print(dir(ttt))
 print("Full Board: ", ttt.check_if_full_board())
 print("Winner: ", ttt.check_if_winner("X"))
+ttt.clear_screen()
 
 # Print Greeting
 
