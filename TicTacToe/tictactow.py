@@ -55,6 +55,7 @@ class Game:
         return "Tic Tac Toe Game Class"
     
     def print_board(self):
+        print("\n")
         for row in self.board:
             for item in row:
                 print(item, end=" ")
@@ -120,6 +121,21 @@ class Game:
             self.player_1.is_active_player = True
         else:
             self.player_2.is_active_player = True
+
+    def show_score(self):
+        st_desc = f"{self.player_1.name}: {self.player_1.points} vs {self.player_2.name}: {self.player_2.points}"
+        if self.player_1.points == self.player_2.points:
+            st_desc += ". Tie"
+        elif self.player_1.points > self.player_2.points:
+            st_desc += f". {self.player_1} winning!"
+        else:
+            st_desc += f". {self.player_2} winning!"
+        print(st_desc)
+
+    def show_active_player(self):
+        for player in self.players:
+            if player.is_active_player:
+                print(f"{player.name}'s turn, using '{player.tile}'")
     
             
 ######### INITIAL SETUP ################
@@ -140,8 +156,12 @@ ttt = Game(player_1, player_2)
 ttt.random_player()
 ttt.clear_screen()
 
-# Show Score
-# Print Board
+ttt.show_score()
+ttt.print_board()
+ttt.show_active_player()
+
+# print(ttt.available_positions)
+
 # Show available positions
 # Select position
 
