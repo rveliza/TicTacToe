@@ -14,7 +14,7 @@ greeting_message = """
 
 
 class Player:
-    def __init__(self, name, tile):
+    def __init__(self, name: str, tile: str):
         self.name = name
         self.tile = tile
         self.points = 0
@@ -37,20 +37,76 @@ class Player:
 
 
 ############## Game
-## Attributes:
-    # board
-    # player_1
-    # player_2
 ## Methods:
-    # print_board
+    # mark board
     # check_if_winner
     # check_if_tie
     # reset_board
     # clear_screen
 
+class Game:
+    def __init__(self, player_1: object, player_2: object):
+        self.board = [
+    ["X", "|", "X", "|", "X"],
+    ["-", "-", "-", "-", "-"],
+    ["X", "|", "X", "|", "X"],
+    ["-", "-", "-", "-", "-"],
+    ["X", "|", "X", "|", "X"]
+]
+        self.player_1 = player_1
+        self.player_2 = player_2
 
+        self.available_positions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    
+    def __repr__(self):
+        return "Tic Tac Toe Game Class"
+    
+    def print_board(self):
+        for row in self.board:
+            for item in row:
+                print(item, end=" ")
+            print("\n")
 
-# Def Board
+    def check_if_full_board(self):
+        if len(self.available_positions) == 0:
+            return True
+        return False
+    
+    def check_if_winner(self, tile):
+        # Top Row
+        if self.board[0][0] == tile and self.board[0][2] == tile and self.board[0][4] == tile:
+            return True
+        # Middle Row
+        if self.board[2][0] == tile and self.board[2][2] == tile and self.board[2][4] == tile:
+            return True
+        # Bottom Row
+        if self.board[4][0] == tile and self.board[4][2] == tile and self.board[4][4] == tile:
+            return True
+        # Left Col
+        if self.board[0][0] == tile and self.board[2][0] == tile and self.board[4][0] == tile:
+            return True
+        # Middle Col
+        if self.board[0][2] == tile and self.board[2][2] == tile and self.board[4][2] == tile:
+            return True
+        # Right Col
+        if self.board[0][4] == tile and self.board[2][4] == tile and self.board[4][4] == tile:
+            return True
+        # Diag 1
+        if self.board[0][0] == tile and self.board[2][2] == tile and self.board[4][4] == tile:
+            return True
+        # Diag 2
+        if self.board[4][0] == tile and self.board[2][2] == tile and self.board[0][4] == tile:
+            return True
+        return False
+        
+            
+
+player_1 = Player("Reyner", "X")
+player_2 = Player("Juan", "O")
+
+ttt = Game(player_1, player_2)
+print("Full Board: ", ttt.check_if_full_board())
+print("Winner: ", ttt.check_if_winner("X"))
 
 # Print Greeting
 

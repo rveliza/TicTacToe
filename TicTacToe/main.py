@@ -1,33 +1,4 @@
-from random import randint
-import os
 
-greeting_message = """
-***********************************************************************
-*     *****  *****  *****   ***** ***** *****   ***** ***** *****     * 
-*       *      *    *         *   *   * *         *   *   * *         *
-*       *      *    *         *   ***** *         *   *   * ***       *
-*       *      *    *         *   *   * *         *   *   * *         *
-*       *    *****  *****     *   *   * *****     *   ***** *****     *
-***********************************************************************
-                       Welcome to the game!  
-"""
-
-game_over = False
-global player_1_turn
-player_1_turn = False
-playing_tile = "O"
-player_1_score = 0
-player_2_score = 0
-
-board = [
-    [" ", "|", " ", "|", " "],
-    ["-", "-", "-", "-", "-"],
-    [" ", "|", " ", "|", " "],
-    ["-", "-", "-", "-", "-"],
-    [" ", "|", " ", "|", " "]
-]
-
-available_positions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 def mark_board(position, marker):
     if position == "7":
@@ -51,12 +22,6 @@ def mark_board(position, marker):
     else:
         pass
 
-
-def print_board(board):
-    for row in board:
-        for item in row:
-            print(item, end=" ")
-        print("\n")
 
 def choose_player(value):
     return input(f"Choose a name for player {value}: ")
