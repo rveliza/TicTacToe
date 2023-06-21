@@ -47,6 +47,7 @@ class Game:
 ]
         self.player_1 = player_1
         self.player_2 = player_2
+        self.players = [player_1, player_2]
 
         self.available_positions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
     
@@ -112,22 +113,33 @@ class Game:
 ]
     def clear_screen(self):
         os.system('clear')
+
+    def random_player(self):
+        random_number = randint(0, 1)
+        if random_number == 0:
+            self.player_1.is_active_player = True
+        else:
+            self.player_2.is_active_player = True
+    
             
 ######### INITIAL SETUP ################
 os.system('clear')
 print(greeting_message)
 
-
-
+# Create Players
 x_player_name = input("Name for player playing 'X': ")
 player_1 = Player(x_player_name, "X")
 
 y_player_name = input("Name for player playing 'O': ")
 player_2 = Player(y_player_name, "O")
 
-# Randomly Choose First Player
+# Create Game
+ttt = Game(player_1, player_2)
 
-# Clear Screen
+# Randomly Choose First Player
+ttt.random_player()
+ttt.clear_screen()
+
 # Show Score
 # Print Board
 # Show available positions
