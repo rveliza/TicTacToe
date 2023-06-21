@@ -12,17 +12,28 @@ greeting_message = """
                        Welcome to the game!  
 """
 
-############## PLAYER
-## Attributes:
-    # name
-    # tile
-    # points
-    # is_active
-## Methods
-    # add_point
-    # switch_active
-    # reset_points
 
+class Player:
+    def __init__(self, name, tile):
+        self.name = name
+        self.tile = tile
+        self.points = 0
+        self.is_active_player = False
+    
+    def __repr__(self):
+        return f"{self.name} is playing '{self.tile}' and has {self.points} points. Active player: {self.is_active_player}"
+    
+    def add_point(self):
+        self.points += 1
+    
+    def switch_active(self):
+        if self.is_active_player == False:
+            self.is_active_player = True
+        else:
+            self.is_active_player = False
+    
+    def reset_points(self):
+        self.points = 0
 
 
 ############## Game
@@ -31,6 +42,7 @@ greeting_message = """
     # player_1
     # player_2
 ## Methods:
+    # print_board
     # check_if_winner
     # check_if_tie
     # reset_board
