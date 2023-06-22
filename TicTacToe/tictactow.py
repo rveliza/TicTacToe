@@ -132,10 +132,13 @@ class Game:
             st_desc += f". {self.player_2} winning!"
         print(st_desc)
 
-    def show_active_player(self):
+    def select_active_player(self):
         for player in self.players:
             if player.is_active_player:
-                print(f"{player.name}'s turn, using '{player.tile}'")
+                return player
+
+    def show_active_player(self, player):
+        print(f"{player.name}'s turn, using '{player.tile}'")
     
             
 ######### INITIAL SETUP ################
@@ -154,16 +157,15 @@ ttt = Game(player_1, player_2)
 
 # Randomly Choose First Player
 ttt.random_player()
-ttt.clear_screen()
 
+# Every Move
+ttt.clear_screen()
 ttt.show_score()
 ttt.print_board()
-ttt.show_active_player()
+active_player = ttt.select_active_player()
+ttt.show_active_player(active_player)
 
 # print(ttt.available_positions)
-
-# Show available positions
-# Select position
 
 # Check if winner 
 
