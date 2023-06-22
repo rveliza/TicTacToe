@@ -12,7 +12,6 @@ greeting_message = """
                        Welcome to the game!  
 """
 
-
 class Player:
     def __init__(self, name: str, tile: str):
         self.name = name
@@ -29,7 +28,6 @@ class Player:
     def reset_points(self):
         self.points = 0
 
-
 class Game:
     def __init__(self, player_1: object, player_2: object):
         self.board = [
@@ -42,9 +40,7 @@ class Game:
         self.player_1 = player_1
         self.player_2 = player_2
         self.players = [player_1, player_2]
-
         self.available_positions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-
         self.game_over = False
     
     def __repr__(self):
@@ -104,30 +100,30 @@ class Game:
             return True
         return False
     
-    def check_if_winner(self, tile: str):
+    def check_if_winner(self, player: object):
         # Top Row
-        if self.board[0][0] == tile and self.board[0][2] == tile and self.board[0][4] == tile:
+        if self.board[0][0] == player.tile and self.board[0][2] == player.tile and self.board[0][4] == player.tile:
             return True
         # Middle Row
-        if self.board[2][0] == tile and self.board[2][2] == tile and self.board[2][4] == tile:
+        if self.board[2][0] == player.tile and self.board[2][2] == player.tile and self.board[2][4] == player.tile:
             return True
         # Bottom Row
-        if self.board[4][0] == tile and self.board[4][2] == tile and self.board[4][4] == tile:
+        if self.board[4][0] == player.tile and self.board[4][2] == player.tile and self.board[4][4] == player.tile:
             return True
         # Left Col
-        if self.board[0][0] == tile and self.board[2][0] == tile and self.board[4][0] == tile:
+        if self.board[0][0] == player.tile and self.board[2][0] == player.tile and self.board[4][0] == player.tile:
             return True
         # Middle Col
-        if self.board[0][2] == tile and self.board[2][2] == tile and self.board[4][2] == tile:
+        if self.board[0][2] == player.tile and self.board[2][2] == player.tile and self.board[4][2] == player.tile:
             return True
         # Right Col
-        if self.board[0][4] == tile and self.board[2][4] == tile and self.board[4][4] == tile:
+        if self.board[0][4] == player.tile and self.board[2][4] == player.tile and self.board[4][4] == player.tile:
             return True
         # Diag 1
-        if self.board[0][0] == tile and self.board[2][2] == tile and self.board[4][4] == tile:
+        if self.board[0][0] == player.tile and self.board[2][2] == player.tile and self.board[4][4] == player.tile:
             return True
         # Diag 2
-        if self.board[4][0] == tile and self.board[2][2] == tile and self.board[0][4] == tile:
+        if self.board[4][0] == player.tile and self.board[2][2] == player.tile and self.board[0][4] == player.tile:
             return True
         return False
     
@@ -181,6 +177,31 @@ class Game:
         else:
             return False
 
+    def small_reset(self):
+        self.clear_screen()
+        self.show_score()
+        self.print_board()
+
+    def exit_game(self):
+        self.game_over = True
+        self.small_reset()
+        print("Good Bye!")
+
+    def is_winner_procedure(self, active_player):
+        print(f"\n{active_player.name} won! with {active_player.points} points!")
+        active_player.add_point()
+        continue_play = ttt.prompt_continue_play()
+        self.small_reset()
+        if not continue_play:
+            self.exit_game()
+
+    def board_full_procedure(self):
+        print("It is a tie!")
+        continue_play = ttt.prompt_continue_play()
+        self.small_reset()
+        if not continue_play:
+            self.exit_game()
+
 ######### INITIAL SETUP ################
 os.system('clear')
 print(greeting_message)
@@ -200,9 +221,7 @@ ttt.random_player()
 
 ############### GAME LOOP #################
 while(not ttt.game_over):
-    ttt.clear_screen()
-    ttt.show_score()
-    ttt.print_board()
+    ttt.small_reset()
     active_player = ttt.select_active_player()
     ttt.show_active_player(active_player)
 
@@ -210,30 +229,9 @@ while(not ttt.game_over):
     tile_added = ttt.add_tile(active_player, selected_position)
     if tile_added:
         ttt.switch_active_players()
-        is_winner = ttt.check_if_winner(active_player.tile)
+        is_winner = ttt.check_if_winner(active_player)
         board_full = ttt.check_if_full_board()
         if is_winner:
-            ttt.clear_screen()
-            active_player.add_point()
-            ttt.show_score()
-            ttt.print_board()
-            print(f"{active_player.name} won!")
-            continue_play = ttt.prompt_continue_play()
-            if not continue_play:
-                ttt.game_over = True
-                ttt.clear_screen()
-                ttt.show_score()
-                print("Good bye!")
-        if board_full:
-            ttt.clear_screen()
-            ttt.show_score()
-            ttt.print_board()
-            print("It is a tie!")
-            continue_play = ttt.prompt_continue_play()
-            if not continue_play:
-                ttt.game_over = True
-                ttt.clear_screen()
-                ttt.show_score()
-                print("Good bye!")
-
-    
+            ttt.is_winner_procedure(active_player)
+        elif board_full:
+            ttt.board_full_procedure()
