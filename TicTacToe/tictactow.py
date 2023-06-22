@@ -61,9 +61,36 @@ class Game:
                 print(item, end=" ")
             print("\n")
 
-    def add_tile(self, tile: str, row: int, col: int):
-        self.board[row][col] = tile
-        self.available_positions.remove(tile)
+    def add_tile(self, player: object, position: str):
+        position = int(position)
+        if position == 7:
+            self.board[0][0] = player.tile
+            self.available_positions.remove(str(position))
+        if position == 8:
+            self.board[0][2] = player.tile
+            self.available_positions.remove(str(position))
+        if position == 9:
+            self.board[0][4] = player.tile
+            self.available_positions.remove(str(position))
+        if position == 4:
+            self.board[2][0] = player.tile
+            self.available_positions.remove(str(position))
+        if position == 5:
+            self.board[2][2] = player.tile
+            self.available_positions.remove(str(position))
+        if position == 6:
+            self.board[2][4] = player.tile
+            self.available_positions.remove(str(position))
+        if position == 1:
+            self.board[4][0] = player.tile
+            self.available_positions.remove(str(position))
+        if position == 2:
+            self.board[4][2] = player.tile
+            self.available_positions.remove(str(position))
+        if position == 3:
+            self.board[4][4] = player.tile
+            self.available_positions.remove(str(position))
+        
 
     def check_if_full_board(self):
         if len(self.available_positions) == 0:
@@ -139,6 +166,10 @@ class Game:
 
     def show_active_player(self, player):
         print(f"{player.name}'s turn, using '{player.tile}'")
+
+    def show_available_moves(self):
+        return input(f"Choose an available space: {self.available_positions} ")
+        
     
             
 ######### INITIAL SETUP ################
@@ -158,14 +189,17 @@ ttt = Game(player_1, player_2)
 # Randomly Choose First Player
 ttt.random_player()
 
-# Every Move
+# First Move
 ttt.clear_screen()
 ttt.show_score()
 ttt.print_board()
 active_player = ttt.select_active_player()
 ttt.show_active_player(active_player)
 
-# print(ttt.available_positions)
+selected_position = ttt.show_available_moves()
+ttt.add_tile(active_player, selected_position)
+ttt.clear_screen()
+ttt.print_board()
 
 # Check if winner 
 
