@@ -26,12 +26,6 @@ class Player:
     def add_point(self):
         self.points += 1
     
-    def switch_active(self):
-        if self.is_active_player == False:
-            self.is_active_player = True
-        else:
-            self.is_active_player = False
-    
     def reset_points(self):
         self.points = 0
 
@@ -50,6 +44,8 @@ class Game:
         self.players = [player_1, player_2]
 
         self.available_positions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+        self.game_over = False
     
     def __repr__(self):
         return "Tic Tac Toe Game Class"
@@ -62,36 +58,47 @@ class Game:
             print("\n")
 
     def add_tile(self, player: object, position: str):
-        position = int(position)
-        if position == 7:
-            self.board[0][0] = player.tile
-            self.available_positions.remove(str(position))
-        if position == 8:
-            self.board[0][2] = player.tile
-            self.available_positions.remove(str(position))
-        if position == 9:
-            self.board[0][4] = player.tile
-            self.available_positions.remove(str(position))
-        if position == 4:
-            self.board[2][0] = player.tile
-            self.available_positions.remove(str(position))
-        if position == 5:
-            self.board[2][2] = player.tile
-            self.available_positions.remove(str(position))
-        if position == 6:
-            self.board[2][4] = player.tile
-            self.available_positions.remove(str(position))
-        if position == 1:
-            self.board[4][0] = player.tile
-            self.available_positions.remove(str(position))
-        if position == 2:
-            self.board[4][2] = player.tile
-            self.available_positions.remove(str(position))
-        if position == 3:
-            self.board[4][4] = player.tile
-            self.available_positions.remove(str(position))
+        if position in self.available_positions:
+            position = int(position)
+            if position == 7:
+                self.board[0][0] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+            if position == 8:
+                self.board[0][2] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+            if position == 9:
+                self.board[0][4] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+            if position == 4:
+                self.board[2][0] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+            if position == 5:
+                self.board[2][2] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+            if position == 6:
+                self.board[2][4] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+            if position == 1:
+                self.board[4][0] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+            if position == 2:
+                self.board[4][2] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+            if position == 3:
+                self.board[4][4] = player.tile
+                self.available_positions.remove(str(position))
+                return True
+        else:
+            return False
         
-
     def check_if_full_board(self):
         if len(self.available_positions) == 0:
             return True
@@ -124,13 +131,6 @@ class Game:
             return True
         return False
     
-    def check_if_tie(self):
-        full_board = self.check_if_full_board()
-        winner = self.check_if_winner
-        if full_board and not winner:
-            return True
-        return False
-    
     def reset_board(self):
         self.board = [
     [" ", "|", " ", "|", " "],
@@ -139,6 +139,7 @@ class Game:
     ["-", "-", "-", "-", "-"],
     [" ", "|", " ", "|", " "]
 ]
+    
     def clear_screen(self):
         os.system('clear')
 
@@ -151,12 +152,6 @@ class Game:
 
     def show_score(self):
         st_desc = f"{self.player_1.name}: {self.player_1.points} vs {self.player_2.name}: {self.player_2.points}"
-        if self.player_1.points == self.player_2.points:
-            st_desc += ". Tie"
-        elif self.player_1.points > self.player_2.points:
-            st_desc += f". {self.player_1} winning!"
-        else:
-            st_desc += f". {self.player_2} winning!"
         print(st_desc)
 
     def select_active_player(self):
@@ -169,9 +164,23 @@ class Game:
 
     def show_available_moves(self):
         return input(f"Choose an available space: {self.available_positions} ")
-        
-    
+
+    def switch_active_players(self):
+        for player in self.players:
+            if player.is_active_player == True:
+                player.is_active_player = False
+            else:
+                player.is_active_player = True  
             
+    def prompt_continue_play(self):
+        continue_play = input("Would you like to continue? -press any key for 'Yes', 'n' for no.")
+        if continue_play != 'n':
+            self.available_positions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+            self.reset_board()
+            return True
+        else:
+            return False
+
 ######### INITIAL SETUP ################
 os.system('clear')
 print(greeting_message)
@@ -189,53 +198,42 @@ ttt = Game(player_1, player_2)
 # Randomly Choose First Player
 ttt.random_player()
 
-# First Move
-ttt.clear_screen()
-ttt.show_score()
-ttt.print_board()
-active_player = ttt.select_active_player()
-ttt.show_active_player(active_player)
+############### GAME LOOP #################
+while(not ttt.game_over):
+    ttt.clear_screen()
+    ttt.show_score()
+    ttt.print_board()
+    active_player = ttt.select_active_player()
+    ttt.show_active_player(active_player)
 
-selected_position = ttt.show_available_moves()
-ttt.add_tile(active_player, selected_position)
-ttt.clear_screen()
-ttt.print_board()
+    selected_position = ttt.show_available_moves()
+    tile_added = ttt.add_tile(active_player, selected_position)
+    if tile_added:
+        ttt.switch_active_players()
+        is_winner = ttt.check_if_winner(active_player.tile)
+        board_full = ttt.check_if_full_board()
+        if is_winner:
+            ttt.clear_screen()
+            active_player.add_point()
+            ttt.show_score()
+            ttt.print_board()
+            print(f"{active_player.name} won!")
+            continue_play = ttt.prompt_continue_play()
+            if not continue_play:
+                ttt.game_over = True
+                ttt.clear_screen()
+                ttt.show_score()
+                print("Good bye!")
+        if board_full:
+            ttt.clear_screen()
+            ttt.show_score()
+            ttt.print_board()
+            print("It is a tie!")
+            continue_play = ttt.prompt_continue_play()
+            if not continue_play:
+                ttt.game_over = True
+                ttt.clear_screen()
+                ttt.show_score()
+                print("Good bye!")
 
-# Check if winner 
-
-# If winner:
-    # Add point to active player
-    # Ask if continue playing
-    # if yes
-        # Reset Board
-        # clear screen
-        # random player
-        # print score
-        # print board
-    # if no:
-        # Exit game
-        # print exit message and score
-# If no winner:
-    # clear screen
-    # reverse players
-    # print score
-    # print board
-
-# If Tie:
-    # Ask if continue playing
-    # If yes:
-        # Reset Board
-        # clear screen
-        # random player
-        # print score
-        # print board
-    # If no:
-        # exit game
-        # print exit message and score
-# If no Tie:
-    # clear screen
-    # reverse players
-    # print score
-    # print board
-
-
+    
